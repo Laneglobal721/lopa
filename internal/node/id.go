@@ -25,4 +25,3 @@ func NextTaskID() string {
 	seq := atomic.AddUint64(&sequenceID, 1)
 	return fmt.Sprintf("%s-%d", nodeID, seq)
 }
-

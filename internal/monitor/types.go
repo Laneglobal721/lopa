@@ -43,12 +43,12 @@ type Task struct {
 
 // Event is a single netlink-derived change.
 type Event struct {
-	ID      string      `json:"id"`
-	TaskID  string      `json:"task_id"`
-	Type    TaskType    `json:"type"`
-	Change  ChangeKind  `json:"change"`
-	Detail  interface{} `json:"detail"`
-	At      time.Time   `json:"at"`
+	ID     string      `json:"id"`
+	TaskID string      `json:"task_id"`
+	Type   TaskType    `json:"type"`
+	Change ChangeKind  `json:"change"`
+	Detail interface{} `json:"detail"`
+	At     time.Time   `json:"at"`
 }
 
 // DetailInterface is Event.Detail for type=interface.
@@ -70,10 +70,10 @@ type DetailIP struct {
 
 // DetailRoute is Event.Detail for type=route.
 type DetailRoute struct {
-	Table          int    `json:"table"`
-	Dst            string `json:"dst"`              // e.g. "192.168.0.0/24" or "default"
-	Gw             string `json:"gw,omitempty"`     // gateway IP
-	LinkIndex      int    `json:"link_index"`
-	InterfaceName  string `json:"interface_name,omitempty"`
-	Protocol       int    `json:"protocol,omitempty"` // RTPROT_*
+	Table         int    `json:"table"`
+	Dst           string `json:"dst"`          // e.g. "192.168.0.0/24" or "default"
+	Gw            string `json:"gw,omitempty"` // gateway IP
+	LinkIndex     int    `json:"link_index"`
+	InterfaceName string `json:"interface_name,omitempty"`
+	Protocol      int    `json:"protocol,omitempty"` // RTPROT_*
 }

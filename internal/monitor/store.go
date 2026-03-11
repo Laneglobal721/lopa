@@ -28,11 +28,11 @@ func DefaultStore() *Store {
 
 // Store holds monitor tasks and optional event buffers. Thread-safe.
 type Store struct {
-	mu         sync.RWMutex
-	tasks      map[string]*Task
-	events     map[string][]Event // taskID -> ring of events (newest last)
-	bufSize    int
-	nextSeq    uint64
+	mu      sync.RWMutex
+	tasks   map[string]*Task
+	events  map[string][]Event // taskID -> ring of events (newest last)
+	bufSize int
+	nextSeq uint64
 }
 
 // NewStore creates a store with optional event buffer size per task (0 = no buffer).

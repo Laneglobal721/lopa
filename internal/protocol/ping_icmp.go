@@ -118,4 +118,3 @@ func getProto(ip *net.IPAddr) int {
 	}
 	return 58 // ICMPv6
 }
-

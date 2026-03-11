@@ -50,17 +50,17 @@ func (e *Engine) CreatePingTask(params TaskParams) (TaskID, error) {
 	}
 
 	r := &Result{
-		TaskID:   id,
-		NodeID:   t.NodeID,
-		Target:   params.Target,
-		Type:     params.Type,
-		Mode:     params.Mode,
-		Started:  now,
-		Status:   "running",
-		Rounds:   make([]RoundResult, 0),
-		Total:    Stats{},
-		Window:   nil,
-		Error:    "",
+		TaskID:  id,
+		NodeID:  t.NodeID,
+		Target:  params.Target,
+		Type:    params.Type,
+		Mode:    params.Mode,
+		Started: now,
+		Status:  "running",
+		Rounds:  make([]RoundResult, 0),
+		Total:   Stats{},
+		Window:  nil,
+		Error:   "",
 	}
 
 	e.mu.Lock()
@@ -92,17 +92,17 @@ func (e *Engine) CreateTcpTask(params TaskParams) (TaskID, error) {
 	}
 
 	r := &Result{
-		TaskID:   id,
-		NodeID:   t.NodeID,
-		Target:   params.Target,
-		Type:     params.Type,
-		Mode:     params.Mode,
-		Started:  now,
-		Status:   "running",
-		Rounds:   make([]RoundResult, 0),
-		Total:    Stats{},
-		Window:   nil,
-		Error:    "",
+		TaskID:  id,
+		NodeID:  t.NodeID,
+		Target:  params.Target,
+		Type:    params.Type,
+		Mode:    params.Mode,
+		Started: now,
+		Status:  "running",
+		Rounds:  make([]RoundResult, 0),
+		Total:   Stats{},
+		Window:  nil,
+		Error:   "",
 	}
 
 	e.mu.Lock()
@@ -134,17 +134,17 @@ func (e *Engine) CreateUdpTask(params TaskParams) (TaskID, error) {
 	}
 
 	r := &Result{
-		TaskID:   id,
-		NodeID:   t.NodeID,
-		Target:   params.Target,
-		Type:     params.Type,
-		Mode:     params.Mode,
-		Started:  now,
-		Status:   "running",
-		Rounds:   make([]RoundResult, 0),
-		Total:    Stats{},
-		Window:   nil,
-		Error:    "",
+		TaskID:  id,
+		NodeID:  t.NodeID,
+		Target:  params.Target,
+		Type:    params.Type,
+		Mode:    params.Mode,
+		Started: now,
+		Status:  "running",
+		Rounds:  make([]RoundResult, 0),
+		Total:   Stats{},
+		Window:  nil,
+		Error:   "",
 	}
 
 	e.mu.Lock()
@@ -176,17 +176,17 @@ func (e *Engine) CreateTwampTask(params TaskParams) (TaskID, error) {
 	}
 
 	r := &Result{
-		TaskID:   id,
-		NodeID:   t.NodeID,
-		Target:   params.Target,
-		Type:     params.Type,
-		Mode:     params.Mode,
-		Started:  now,
-		Status:   "running",
-		Rounds:   make([]RoundResult, 0),
-		Total:    Stats{},
-		Window:   nil,
-		Error:    "",
+		TaskID:  id,
+		NodeID:  t.NodeID,
+		Target:  params.Target,
+		Type:    params.Type,
+		Mode:    params.Mode,
+		Started: now,
+		Status:  "running",
+		Rounds:  make([]RoundResult, 0),
+		Total:   Stats{},
+		Window:  nil,
+		Error:   "",
 	}
 
 	e.mu.Lock()
@@ -223,17 +223,17 @@ func (e *Engine) CreatePassiveTask(params TaskParams) (TaskID, error) {
 	}
 
 	r := &Result{
-		TaskID:   id,
-		NodeID:   t.NodeID,
-		Target:   params.Target,
-		Type:     "passive",
-		Mode:     params.Mode,
-		Started:  now,
-		Status:   "running",
-		Rounds:   make([]RoundResult, 0),
-		Total:    Stats{},
-		Window:   nil,
-		Error:    "",
+		TaskID:  id,
+		NodeID:  t.NodeID,
+		Target:  params.Target,
+		Type:    "passive",
+		Mode:    params.Mode,
+		Started: now,
+		Status:  "running",
+		Rounds:  make([]RoundResult, 0),
+		Total:   Stats{},
+		Window:  nil,
+		Error:   "",
 	}
 
 	e.mu.Lock()
@@ -647,5 +647,3 @@ func computeStats(s *Stats, rtt time.Duration, ok bool) {
 		s.LossRate = float64(s.Sent-s.Received) / float64(s.Sent)
 	}
 }
-
-

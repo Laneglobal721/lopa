@@ -35,4 +35,3 @@ func S() *zap.SugaredLogger {
 	}
 	return slog
 }
-

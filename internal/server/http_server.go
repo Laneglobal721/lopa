@@ -174,10 +174,10 @@ func deleteTaskHandler(c echo.Context) error {
 // Monitor handlers
 func createMonitorHandler(c echo.Context) error {
 	var req struct {
-		Type       string        `json:"type"`
+		Type       string         `json:"type"`
 		Filter     monitor.Filter `json:"filter"`
-		WebhookURL string        `json:"webhook_url"`
-		Enabled    *bool         `json:"enabled"`
+		WebhookURL string         `json:"webhook_url"`
+		Enabled    *bool          `json:"enabled"`
 	}
 	if err := c.Bind(&req); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
@@ -219,8 +219,8 @@ func getMonitorHandler(c echo.Context) error {
 func updateMonitorHandler(c echo.Context) error {
 	id := c.Param("id")
 	var req struct {
-		WebhookURL *string        `json:"webhook_url"`
-		Enabled    *bool          `json:"enabled"`
+		WebhookURL *string         `json:"webhook_url"`
+		Enabled    *bool           `json:"enabled"`
 		Filter     *monitor.Filter `json:"filter"`
 	}
 	if err := c.Bind(&req); err != nil {
@@ -269,4 +269,3 @@ func getMonitorEventsHandler(c echo.Context) error {
 	events := st.GetEvents(id, lastN)
 	return c.JSON(http.StatusOK, events)
 }
-

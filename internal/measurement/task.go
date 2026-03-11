@@ -23,18 +23,18 @@ type TaskParams struct {
 	Timeout    time.Duration `json:"timeout"`
 	PacketSize int           `json:"packet_size"`
 
-	SourceIP   string `json:"source_ip"`
-	Interface  string `json:"interface"`
-	Mode       Mode   `json:"mode"`
-	Count      int    `json:"count"`    // for count mode
+	SourceIP   string        `json:"source_ip"`
+	Interface  string        `json:"interface"`
+	Mode       Mode          `json:"mode"`
+	Count      int           `json:"count"`    // for count mode
 	Duration   time.Duration `json:"duration"` // for duration mode
 	Rounds     int           `json:"rounds"`
 	RoundDelay time.Duration `json:"round_delay"`
 
 	// Continuous only
-	LossThreshold     float64       `json:"loss_threshold"`
-	LatencyThreshold  time.Duration `json:"latency_threshold"`
-	AlertCallbackURL  string        `json:"alert_callback_url"`
+	LossThreshold    float64       `json:"loss_threshold"`
+	LatencyThreshold time.Duration `json:"latency_threshold"`
+	AlertCallbackURL string        `json:"alert_callback_url"`
 }
 
 // TaskID is a globally unique identifier: <node-uid>-<seq>.
@@ -47,4 +47,3 @@ type Task struct {
 	NodeID    string     `json:"node_id"`
 	CreatedAt time.Time  `json:"created_at"`
 }
-

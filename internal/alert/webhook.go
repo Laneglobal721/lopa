@@ -11,30 +11,30 @@ import (
 
 // EventAlert and EventRecovery are the values for Payload.Event.
 const (
-	EventAlert   = "alert"   // threshold exceeded
+	EventAlert    = "alert"    // threshold exceeded
 	EventRecovery = "recovery" // metrics returned to normal after alert
 )
 
 // Payload is the JSON body sent to the webhook URL (alert or recovery).
 type Payload struct {
-	Event         string  `json:"event"`          // "alert" or "recovery"
+	Event         string  `json:"event"` // "alert" or "recovery"
 	TaskID        string  `json:"task_id"`
-	NodeID       string  `json:"node_id"`
-	Target       string  `json:"target"`
-	Type         string  `json:"type"`
-	Mode         string  `json:"mode"`
-	Reason       string  `json:"reason"`         // "loss", "latency", or "recovery"
-	Threshold    string  `json:"threshold"`      // human-readable threshold (alert only)
-	CurrentValue string  `json:"current_value"`  // human-readable current value
+	NodeID        string  `json:"node_id"`
+	Target        string  `json:"target"`
+	Type          string  `json:"type"`
+	Mode          string  `json:"mode"`
+	Reason        string  `json:"reason"`                   // "loss", "latency", or "recovery"
+	Threshold     string  `json:"threshold"`                // human-readable threshold (alert only)
+	CurrentValue  string  `json:"current_value"`            // human-readable current value
 	RecoveredFrom string  `json:"recovered_from,omitempty"` // for recovery: e.g. "loss, latency"
-	WindowSeconds int    `json:"window_seconds"`
-	Sent         int     `json:"sent"`
-	Received     int     `json:"received"`
-	LossRate     float64 `json:"loss_rate"`
-	MinRTT       string  `json:"min_rtt"`
-	MaxRTT       string  `json:"max_rtt"`
-	AvgRTT       string  `json:"avg_rtt"`
-	Timestamp    string  `json:"timestamp"`
+	WindowSeconds int     `json:"window_seconds"`
+	Sent          int     `json:"sent"`
+	Received      int     `json:"received"`
+	LossRate      float64 `json:"loss_rate"`
+	MinRTT        string  `json:"min_rtt"`
+	MaxRTT        string  `json:"max_rtt"`
+	AvgRTT        string  `json:"avg_rtt"`
+	Timestamp     string  `json:"timestamp"`
 }
 
 // Notify sends the payload to the given URL via HTTP POST (async, non-blocking).

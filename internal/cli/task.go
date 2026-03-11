@@ -185,4 +185,3 @@ func runTaskDelete(cmd *cobra.Command, args []string) error {
 	fmt.Printf("task %s deleted from daemon\n", id)
 	return nil
 }
-

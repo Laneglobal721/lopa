@@ -1,10 +1,10 @@
 package cli
 
 import (
-	"fmt"
-	"net/http"
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"strings"
 	"time"
 
@@ -220,4 +220,3 @@ func printResult(res measurement.Result) {
 		}
 	}
 }
-

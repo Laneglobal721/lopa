@@ -5,8 +5,8 @@ package monitor
 import (
 	"context"
 
-	"github.com/yanjiulab/lopa/internal/logger"
 	"github.com/vishvananda/netlink"
+	"github.com/yanjiulab/lopa/internal/logger"
 	"golang.org/x/sys/unix"
 )
 
@@ -105,7 +105,7 @@ func dispatchAddrUpdate(store *Store, au netlink.AddrUpdate) {
 		InterfaceIndex: au.LinkIndex,
 		InterfaceName:  linkName,
 		Address:        addrStr,
-		PrefixLen:     prefixLen,
+		PrefixLen:      prefixLen,
 	}
 
 	tasks := store.TasksForType(TypeIP)

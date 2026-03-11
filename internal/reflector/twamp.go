@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	twampSenderMin   = 16
+	twampSenderMin    = 16
 	twampReflectorLen = 40
 )
 

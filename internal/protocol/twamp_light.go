@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	twampSenderPktMin   = 16
+	twampSenderPktMin    = 16
 	twampReflectorPktMin = 40
-	twampDefaultPort    = "862"
+	twampDefaultPort     = "862"
 )
 
 // encodeTWAMPTimestamp writes 8-byte RFC 4656 timestamp (32b seconds + 32b fraction) big-endian.

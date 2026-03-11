@@ -54,4 +54,3 @@ func Load() (*Config, error) {
 func Global() *Config {
 	return &global
 }
-

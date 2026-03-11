@@ -49,11 +49,10 @@ type Result struct {
 	Started  time.Time `json:"started"`
 	Finished time.Time `json:"finished"`
 
-	Total       Stats          `json:"total"`
-	Rounds      []RoundResult  `json:"rounds,omitempty"`
-	Window      *WindowStats   `json:"window,omitempty"`
-	Status      string         `json:"status"` // running/finished/failed/stopped
-	Error       string         `json:"error,omitempty"`
-	LastUpdated time.Time      `json:"last_updated"`
+	Total       Stats         `json:"total"`
+	Rounds      []RoundResult `json:"rounds,omitempty"`
+	Window      *WindowStats  `json:"window,omitempty"`
+	Status      string        `json:"status"` // running/finished/failed/stopped
+	Error       string        `json:"error,omitempty"`
+	LastUpdated time.Time     `json:"last_updated"`
 }
-

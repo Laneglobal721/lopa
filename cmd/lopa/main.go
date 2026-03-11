@@ -12,4 +12,3 @@ func main() {
 		log.Fatalf("lopa exit with error: %v", err)
 	}
 }
-

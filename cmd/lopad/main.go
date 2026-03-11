@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -14,6 +15,7 @@ import (
 	"github.com/yanjiulab/lopa/internal/node"
 	"github.com/yanjiulab/lopa/internal/reflector"
 	"github.com/yanjiulab/lopa/internal/server"
+	"github.com/yanjiulab/lopa/internal/version"
 )
 
 var noReflector, noMonitor bool
@@ -25,7 +27,18 @@ func init() {
 
 // lopad: Lopa daemon, runs measurement engine and HTTP API in background.
 func main() {
+	// Lightweight "subcommand" support for version.
+	if len(os.Args) > 1 && os.Args[1] == "version" {
+		fmt.Println(version.String("lopad"))
+		return
+	}
+
+	printVersion := flag.Bool("version", false, "print version and exit")
 	flag.Parse()
+	if *printVersion {
+		fmt.Println(version.String("lopad"))
+		return
+	}
 	if _, err := config.Load(); err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
@@ -71,4 +84,3 @@ func main() {
 
 	<-ctx.Done()
 }
-
