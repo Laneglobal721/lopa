@@ -2,11 +2,13 @@ package server
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/yanjiulab/lopa/internal/config"
 	"github.com/yanjiulab/lopa/internal/logger"
 	"github.com/yanjiulab/lopa/internal/measurement"
+	"github.com/yanjiulab/lopa/internal/monitor"
 )
 
 // Start starts the HTTP server in a separate goroutine.
@@ -43,6 +45,14 @@ func registerRoutes(e *echo.Echo) {
 	g.GET("/tasks/:id", getTaskHandler)
 	g.POST("/tasks/:id/stop", stopTaskHandler)
 	g.DELETE("/tasks/:id", deleteTaskHandler)
+
+	// Monitors (netlink-based: interface, IP changes)
+	g.POST("/monitors", createMonitorHandler)
+	g.GET("/monitors", listMonitorsHandler)
+	g.GET("/monitors/:id", getMonitorHandler)
+	g.PATCH("/monitors/:id", updateMonitorHandler)
+	g.DELETE("/monitors/:id", deleteMonitorHandler)
+	g.GET("/monitors/:id/events", getMonitorEventsHandler)
 }
 
 type createPingRequest struct {
@@ -159,5 +169,104 @@ func deleteTaskHandler(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, map[string]string{"error": "task not found"})
 	}
 	return c.NoContent(http.StatusNoContent)
+}
+
+// Monitor handlers
+func createMonitorHandler(c echo.Context) error {
+	var req struct {
+		Type       string        `json:"type"`
+		Filter     monitor.Filter `json:"filter"`
+		WebhookURL string        `json:"webhook_url"`
+		Enabled    *bool         `json:"enabled"`
+	}
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+	t := &monitor.Task{
+		Type:       monitor.TaskType(req.Type),
+		Filter:     req.Filter,
+		WebhookURL: req.WebhookURL,
+	}
+	if req.Type == "" {
+		t.Type = monitor.TypeInterface
+	}
+	if req.Enabled != nil {
+		t.Enabled = *req.Enabled
+	} else {
+		t.Enabled = true
+	}
+	st := monitor.DefaultStore()
+	id := st.AddTask(t)
+	return c.JSON(http.StatusCreated, map[string]string{"id": id})
+}
+
+func listMonitorsHandler(c echo.Context) error {
+	st := monitor.DefaultStore()
+	tasks := st.ListTasks()
+	return c.JSON(http.StatusOK, tasks)
+}
+
+func getMonitorHandler(c echo.Context) error {
+	id := c.Param("id")
+	st := monitor.DefaultStore()
+	t, ok := st.GetTask(id)
+	if !ok {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "monitor not found"})
+	}
+	return c.JSON(http.StatusOK, t)
+}
+
+func updateMonitorHandler(c echo.Context) error {
+	id := c.Param("id")
+	var req struct {
+		WebhookURL *string        `json:"webhook_url"`
+		Enabled    *bool          `json:"enabled"`
+		Filter     *monitor.Filter `json:"filter"`
+	}
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+	st := monitor.DefaultStore()
+	ok := st.UpdateTask(id, func(t *monitor.Task) {
+		if req.WebhookURL != nil {
+			t.WebhookURL = *req.WebhookURL
+		}
+		if req.Enabled != nil {
+			t.Enabled = *req.Enabled
+		}
+		if req.Filter != nil {
+			t.Filter = *req.Filter
+		}
+	})
+	if !ok {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "monitor not found"})
+	}
+	return c.NoContent(http.StatusNoContent)
+}
+
+func deleteMonitorHandler(c echo.Context) error {
+	id := c.Param("id")
+	st := monitor.DefaultStore()
+	ok := st.DeleteTask(id)
+	if !ok {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "monitor not found"})
+	}
+	return c.NoContent(http.StatusNoContent)
+}
+
+func getMonitorEventsHandler(c echo.Context) error {
+	id := c.Param("id")
+	lastN := 0
+	if n := c.QueryParam("last"); n != "" {
+		if v, err := strconv.Atoi(n); err == nil && v > 0 {
+			lastN = v
+		}
+	}
+	st := monitor.DefaultStore()
+	if _, ok := st.GetTask(id); !ok {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "monitor not found"})
+	}
+	events := st.GetEvents(id, lastN)
+	return c.JSON(http.StatusOK, events)
 }
 

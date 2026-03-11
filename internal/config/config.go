@@ -15,10 +15,15 @@ type Config struct {
 	} `mapstructure:"log"`
 
 	Reflector struct {
-		Enabled  bool   `mapstructure:"enabled"`
-		Addr     string `mapstructure:"addr"`
+		Enabled   bool   `mapstructure:"enabled"`
+		Addr      string `mapstructure:"addr"`
 		TwampAddr string `mapstructure:"twamp_addr"` // optional, e.g. ":862" for TWAMP-light reflector
 	} `mapstructure:"reflector"`
+
+	Monitor struct {
+		Enabled         bool `mapstructure:"enabled"`
+		EventBufferSize int  `mapstructure:"event_buffer_size"`
+	} `mapstructure:"monitor"`
 }
 
 var global Config
@@ -35,6 +40,8 @@ func Load() (*Config, error) {
 	v.SetDefault("reflector.enabled", true)
 	v.SetDefault("reflector.addr", ":8081")
 	v.SetDefault("reflector.twamp_addr", ":862") // TWAMP-light reflector; set empty to disable
+	v.SetDefault("monitor.enabled", true)
+	v.SetDefault("monitor.event_buffer_size", 100)
 
 	if err := v.Unmarshal(&global); err != nil {
 		return nil, err

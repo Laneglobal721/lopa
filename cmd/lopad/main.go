@@ -10,15 +10,17 @@ import (
 
 	"github.com/yanjiulab/lopa/internal/config"
 	"github.com/yanjiulab/lopa/internal/logger"
+	"github.com/yanjiulab/lopa/internal/monitor"
 	"github.com/yanjiulab/lopa/internal/node"
 	"github.com/yanjiulab/lopa/internal/reflector"
 	"github.com/yanjiulab/lopa/internal/server"
 )
 
-var noReflector bool
+var noReflector, noMonitor bool
 
 func init() {
 	flag.BoolVar(&noReflector, "no-reflector", false, "disable reflector (UDP echo server)")
+	flag.BoolVar(&noMonitor, "no-monitor", false, "disable netlink monitor (interface/IP change events)")
 }
 
 // lopad: Lopa daemon, runs measurement engine and HTTP API in background.
@@ -55,6 +57,16 @@ func main() {
 		}
 	} else {
 		logger.S().Info("reflector disabled by config or --no-reflector")
+	}
+
+	monitorEnabled := !noMonitor && config.Global().Monitor.Enabled
+	if monitorEnabled {
+		go func() {
+			monitor.Run(ctx, monitor.DefaultStore())
+		}()
+		logger.S().Info("monitor (netlink) started")
+	} else {
+		logger.S().Info("monitor disabled by config or --no-monitor")
 	}
 
 	<-ctx.Done()
