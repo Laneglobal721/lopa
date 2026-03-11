@@ -2,8 +2,9 @@ package measurement
 
 import "time"
 
-// Stats summarizes latency and loss.
+// Stats summarizes latency and loss (active) and/or interface counters (passive).
 type Stats struct {
+	// Active probe fields
 	Sent     int           `json:"sent"`
 	Received int           `json:"received"`
 	LossRate float64       `json:"loss_rate"`
@@ -12,6 +13,16 @@ type Stats struct {
 	AvgRTT   time.Duration `json:"avg_rtt"`
 	Jitter   time.Duration `json:"jitter"`
 	lastRTT  time.Duration `json:"-"` // for jitter computation only
+
+	// Passive (interface counters); used when type=passive
+	BytesIn    uint64 `json:"bytes_in,omitempty"`
+	BytesOut   uint64 `json:"bytes_out,omitempty"`
+	PacketsIn  uint64 `json:"packets_in,omitempty"`
+	PacketsOut uint64 `json:"packets_out,omitempty"`
+	ErrorsIn   uint64 `json:"errors_in,omitempty"`
+	ErrorsOut  uint64 `json:"errors_out,omitempty"`
+	DropsIn    uint64 `json:"drops_in,omitempty"`
+	DropsOut   uint64 `json:"drops_out,omitempty"`
 }
 
 // RoundResult holds statistics for a single round (Design.md §5, §8).

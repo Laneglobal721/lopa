@@ -184,6 +184,22 @@ func runPing(cmd *cobra.Command, args []string) error {
 func printResult(res measurement.Result) {
 	fmt.Printf("Task %s (%s, mode=%s) finished\n", res.TaskID, res.Type, res.Mode)
 	fmt.Printf("Target: %s\n", res.Target)
+	if res.Type == "passive" {
+		fmt.Printf("Bytes in/out: %d / %d\n", res.Total.BytesIn, res.Total.BytesOut)
+		fmt.Printf("Packets in/out: %d / %d\n", res.Total.PacketsIn, res.Total.PacketsOut)
+		if res.Total.ErrorsIn > 0 || res.Total.ErrorsOut > 0 || res.Total.DropsIn > 0 || res.Total.DropsOut > 0 {
+			fmt.Printf("Errors in/out: %d / %d  Drops in/out: %d / %d\n",
+				res.Total.ErrorsIn, res.Total.ErrorsOut, res.Total.DropsIn, res.Total.DropsOut)
+		}
+		if len(res.Rounds) > 0 {
+			fmt.Printf("Rounds: %d\n", len(res.Rounds))
+			for _, rr := range res.Rounds {
+				fmt.Printf("  Round %d: bytes_in=%d bytes_out=%d pkts_in=%d pkts_out=%d\n",
+					rr.Index, rr.Stats.BytesIn, rr.Stats.BytesOut, rr.Stats.PacketsIn, rr.Stats.PacketsOut)
+			}
+		}
+		return
+	}
 	fmt.Printf("Sent: %d, Received: %d, Loss: %.2f%%\n",
 		res.Total.Sent, res.Total.Received, res.Total.LossRate*100)
 	fmt.Printf("RTT min/avg/max/jitter: %s/%s/%s/%s\n",

@@ -38,6 +38,7 @@ func registerRoutes(e *echo.Echo) {
 	g.POST("/tasks/tcp", createTcpTaskHandler)
 	g.POST("/tasks/udp", createUdpTaskHandler)
 	g.POST("/tasks/twamp", createTwampTaskHandler)
+	g.POST("/tasks/passive", createPassiveTaskHandler)
 	g.GET("/tasks", listTasksHandler)
 	g.GET("/tasks/:id", getTaskHandler)
 	g.POST("/tasks/:id/stop", stopTaskHandler)
@@ -106,6 +107,21 @@ func createTwampTaskHandler(c echo.Context) error {
 
 	engine := measurement.DefaultEngine()
 	id, err := engine.CreateTwampTask(req)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+	return c.JSON(http.StatusCreated, createTaskResponse{ID: string(id)})
+}
+
+func createPassiveTaskHandler(c echo.Context) error {
+	var req measurement.TaskParams
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+	req.Type = "passive"
+
+	engine := measurement.DefaultEngine()
+	id, err := engine.CreatePassiveTask(req)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}

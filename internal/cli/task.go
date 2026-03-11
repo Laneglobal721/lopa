@@ -83,9 +83,15 @@ func runTaskList(cmd *cobra.Command, args []string) error {
 	w := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
 	fmt.Fprintln(w, "ID\tTYPE\tMODE\tTARGET\tSTATUS\tSENT\tRECEIVED\tLOSS(%)")
 	for _, r := range results {
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%d\t%d\t%.2f\n",
-			r.TaskID, r.Type, r.Mode, r.Target, r.Status,
-			r.Total.Sent, r.Total.Received, r.Total.LossRate*100)
+		if r.Type == "passive" {
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\tbytes:%d/%d\tpkts:%d/%d\t-\n",
+				r.TaskID, r.Type, r.Mode, r.Target, r.Status,
+				r.Total.BytesIn, r.Total.BytesOut, r.Total.PacketsIn, r.Total.PacketsOut)
+		} else {
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%d\t%d\t%.2f\n",
+				r.TaskID, r.Type, r.Mode, r.Target, r.Status,
+				r.Total.Sent, r.Total.Received, r.Total.LossRate*100)
+		}
 	}
 	_ = w.Flush()
 	return nil
@@ -115,14 +121,22 @@ func runTaskShow(cmd *cobra.Command, args []string) error {
 
 	printResult(res)
 	if res.Window != nil {
-		fmt.Printf("Window: last %ds, sent=%d, recv=%d, loss=%.2f%%, avg=%s, jitter=%s\n",
-			res.Window.WindowSeconds,
-			res.Window.Stats.Sent,
-			res.Window.Stats.Received,
-			res.Window.Stats.LossRate*100,
-			res.Window.Stats.AvgRTT,
-			res.Window.Stats.Jitter,
-		)
+		if res.Type == "passive" {
+			fmt.Printf("Window: last %ds, bytes_in=%d, bytes_out=%d, pkts_in=%d, pkts_out=%d\n",
+				res.Window.WindowSeconds,
+				res.Window.Stats.BytesIn, res.Window.Stats.BytesOut,
+				res.Window.Stats.PacketsIn, res.Window.Stats.PacketsOut,
+			)
+		} else {
+			fmt.Printf("Window: last %ds, sent=%d, recv=%d, loss=%.2f%%, avg=%s, jitter=%s\n",
+				res.Window.WindowSeconds,
+				res.Window.Stats.Sent,
+				res.Window.Stats.Received,
+				res.Window.Stats.LossRate*100,
+				res.Window.Stats.AvgRTT,
+				res.Window.Stats.Jitter,
+			)
+		}
 	}
 	return nil
 }
